@@ -1,0 +1,55 @@
+﻿@model instagram.Models.user
+
+@{
+    ViewBag.Title = "ViewProfile";
+}
+
+<h2>ViewProfile</h2>
+
+<div>
+    <h4>user</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.password)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.password)
+        </dd>
+
+        
+
+        <dt>
+            @Html.DisplayNameFor(model => model.email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.image)
+        </dt>
+
+        <dd>
+	        <img src="@Url.Content(Model.image)" alt="error" class="img-responsive image-center" width="300" height="300" />
+        </dd>
+
+        
+
+    </dl>
+</div>
+<p>
+	@Html.ActionLink("Edit", "ShowUserPosts", new { id = Model.id }) 
+
+	@Html.ActionLink("Back to List", "Index")
+</p>

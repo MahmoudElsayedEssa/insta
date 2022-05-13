@@ -1,0 +1,430 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="instagramModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="comments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="content" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="userId" Type="int" />
+          <Property Name="postId" Type="int" />
+        </EntityType>
+        <EntityType Name="followers">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" />
+          <Property Name="followerId" Type="int" />
+        </EntityType>
+        <EntityType Name="postReacts">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="state" Type="int" />
+          <Property Name="userId" Type="int" />
+          <Property Name="postId" Type="int" />
+        </EntityType>
+        <EntityType Name="posts">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="image" Type="nvarchar(max)" />
+          <Property Name="userId" Type="int" />
+        </EntityType>
+        <EntityType Name="users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="image" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK__comments__postId__440B1D61">
+          <End Role="posts" Type="Self.posts" Multiplicity="0..1" />
+          <End Role="comments" Type="Self.comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="posts">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="postId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__comments__userId__4316F928">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="comments" Type="Self.comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__followers__follo__398D8EEE">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="followers" Type="Self.followers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="followers">
+              <PropertyRef Name="followerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__followers__userI__38996AB5">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="followers" Type="Self.followers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="followers">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__postReact__postI__403A8C7D">
+          <End Role="posts" Type="Self.posts" Multiplicity="0..1" />
+          <End Role="postReacts" Type="Self.postReacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="posts">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="postReacts">
+              <PropertyRef Name="postId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__postReact__userI__3F466844">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="postReacts" Type="Self.postReacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="postReacts">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__posts__userId__3C69FB99">
+          <End Role="users" Type="Self.users" Multiplicity="0..1" />
+          <End Role="posts" Type="Self.posts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="posts">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="instagramModelStoreContainer">
+          <EntitySet Name="comments" EntityType="Self.comments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="followers" EntityType="Self.followers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="postReacts" EntityType="Self.postReacts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="posts" EntityType="Self.posts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="users" EntityType="Self.users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__comments__postId__440B1D61" Association="Self.FK__comments__postId__440B1D61">
+            <End Role="posts" EntitySet="posts" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__comments__userId__4316F928" Association="Self.FK__comments__userId__4316F928">
+            <End Role="users" EntitySet="users" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__followers__follo__398D8EEE" Association="Self.FK__followers__follo__398D8EEE">
+            <End Role="users" EntitySet="users" />
+            <End Role="followers" EntitySet="followers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__followers__userI__38996AB5" Association="Self.FK__followers__userI__38996AB5">
+            <End Role="users" EntitySet="users" />
+            <End Role="followers" EntitySet="followers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__postReact__postI__403A8C7D" Association="Self.FK__postReact__postI__403A8C7D">
+            <End Role="posts" EntitySet="posts" />
+            <End Role="postReacts" EntitySet="postReacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__postReact__userI__3F466844" Association="Self.FK__postReact__userI__3F466844">
+            <End Role="users" EntitySet="users" />
+            <End Role="postReacts" EntitySet="postReacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__posts__userId__3C69FB99" Association="Self.FK__posts__userId__3C69FB99">
+            <End Role="users" EntitySet="users" />
+            <End Role="posts" EntitySet="posts" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="instagramModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="comment">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="content" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="postId" Type="Int32" />
+          <NavigationProperty Name="post" Relationship="Self.FK__comments__postId__440B1D61" FromRole="comments" ToRole="posts" />
+          <NavigationProperty Name="user" Relationship="Self.FK__comments__userId__4316F928" FromRole="comments" ToRole="users" />
+        </EntityType>
+        <EntityType Name="follower">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="followerId" Type="Int32" />
+          <NavigationProperty Name="user" Relationship="Self.FK__followers__follo__398D8EEE" FromRole="followers" ToRole="users" />
+          <NavigationProperty Name="user1" Relationship="Self.FK__followers__userI__38996AB5" FromRole="followers" ToRole="users" />
+        </EntityType>
+        <EntityType Name="postReact">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="state" Type="Int32" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="postId" Type="Int32" />
+          <NavigationProperty Name="post" Relationship="Self.FK__postReact__postI__403A8C7D" FromRole="postReacts" ToRole="posts" />
+          <NavigationProperty Name="user" Relationship="Self.FK__postReact__userI__3F466844" FromRole="postReacts" ToRole="users" />
+        </EntityType>
+        <EntityType Name="post">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="userId" Type="Int32" />
+          <NavigationProperty Name="comments" Relationship="Self.FK__comments__postId__440B1D61" FromRole="posts" ToRole="comments" />
+          <NavigationProperty Name="postReacts" Relationship="Self.FK__postReact__postI__403A8C7D" FromRole="posts" ToRole="postReacts" />
+          <NavigationProperty Name="user" Relationship="Self.FK__posts__userId__3C69FB99" FromRole="posts" ToRole="users" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="comments" Relationship="Self.FK__comments__userId__4316F928" FromRole="users" ToRole="comments" />
+          <NavigationProperty Name="followers" Relationship="Self.FK__followers__follo__398D8EEE" FromRole="users" ToRole="followers" />
+          <NavigationProperty Name="followers1" Relationship="Self.FK__followers__userI__38996AB5" FromRole="users" ToRole="followers" />
+          <NavigationProperty Name="postReacts" Relationship="Self.FK__postReact__userI__3F466844" FromRole="users" ToRole="postReacts" />
+          <NavigationProperty Name="posts" Relationship="Self.FK__posts__userId__3C69FB99" FromRole="users" ToRole="posts" />
+        </EntityType>
+        <Association Name="FK__comments__postId__440B1D61">
+          <End Role="posts" Type="Self.post" Multiplicity="0..1" />
+          <End Role="comments" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="posts">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="postId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__comments__userId__4316F928">
+          <End Role="users" Type="Self.user" Multiplicity="0..1" />
+          <End Role="comments" Type="Self.comment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="comments">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__followers__follo__398D8EEE">
+          <End Role="users" Type="Self.user" Multiplicity="0..1" />
+          <End Role="followers" Type="Self.follower" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="followers">
+              <PropertyRef Name="followerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__followers__userI__38996AB5">
+          <End Role="users" Type="Self.user" Multiplicity="0..1" />
+          <End Role="followers" Type="Self.follower" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="followers">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__postReact__postI__403A8C7D">
+          <End Role="posts" Type="Self.post" Multiplicity="0..1" />
+          <End Role="postReacts" Type="Self.postReact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="posts">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="postReacts">
+              <PropertyRef Name="postId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__postReact__userI__3F466844">
+          <End Role="users" Type="Self.user" Multiplicity="0..1" />
+          <End Role="postReacts" Type="Self.postReact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="postReacts">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__posts__userId__3C69FB99">
+          <End Role="users" Type="Self.user" Multiplicity="0..1" />
+          <End Role="posts" Type="Self.post" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="posts">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="instagramEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="comments" EntityType="Self.comment" />
+          <EntitySet Name="followers" EntityType="Self.follower" />
+          <EntitySet Name="postReacts" EntityType="Self.postReact" />
+          <EntitySet Name="posts" EntityType="Self.post" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <AssociationSet Name="FK__comments__postId__440B1D61" Association="Self.FK__comments__postId__440B1D61">
+            <End Role="posts" EntitySet="posts" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__comments__userId__4316F928" Association="Self.FK__comments__userId__4316F928">
+            <End Role="users" EntitySet="users" />
+            <End Role="comments" EntitySet="comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__followers__follo__398D8EEE" Association="Self.FK__followers__follo__398D8EEE">
+            <End Role="users" EntitySet="users" />
+            <End Role="followers" EntitySet="followers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__followers__userI__38996AB5" Association="Self.FK__followers__userI__38996AB5">
+            <End Role="users" EntitySet="users" />
+            <End Role="followers" EntitySet="followers" />
+          </AssociationSet>
+          <AssociationSet Name="FK__postReact__postI__403A8C7D" Association="Self.FK__postReact__postI__403A8C7D">
+            <End Role="posts" EntitySet="posts" />
+            <End Role="postReacts" EntitySet="postReacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__postReact__userI__3F466844" Association="Self.FK__postReact__userI__3F466844">
+            <End Role="users" EntitySet="users" />
+            <End Role="postReacts" EntitySet="postReacts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__posts__userId__3C69FB99" Association="Self.FK__posts__userId__3C69FB99">
+            <End Role="users" EntitySet="users" />
+            <End Role="posts" EntitySet="posts" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="instagramModelStoreContainer" CdmEntityContainer="instagramEntities1">
+          <EntitySetMapping Name="comments">
+            <EntityTypeMapping TypeName="instagramModel.comment">
+              <MappingFragment StoreEntitySet="comments">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="content" ColumnName="content" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="postId" ColumnName="postId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="followers">
+            <EntityTypeMapping TypeName="instagramModel.follower">
+              <MappingFragment StoreEntitySet="followers">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="followerId" ColumnName="followerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="postReacts">
+            <EntityTypeMapping TypeName="instagramModel.postReact">
+              <MappingFragment StoreEntitySet="postReacts">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="state" ColumnName="state" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="postId" ColumnName="postId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="posts">
+            <EntityTypeMapping TypeName="instagramModel.post">
+              <MappingFragment StoreEntitySet="posts">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="image" ColumnName="image" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="instagramModel.user">
+              <MappingFragment StoreEntitySet="users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="image" ColumnName="image" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

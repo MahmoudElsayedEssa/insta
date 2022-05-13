@@ -1,0 +1,37 @@
+﻿@model IEnumerable<instagram.Models.post>
+
+@{
+    ViewBag.Title = "ShowUserPosts";
+}
+
+<h2>ShowUserPosts</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.image)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.userId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+	        <img src="@Url.Content(item.image )" alt="error" class="img-responsive image-center" width="300" height="300" />
+        </td>
+        
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

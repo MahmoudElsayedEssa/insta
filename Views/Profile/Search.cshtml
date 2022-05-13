@@ -1,0 +1,57 @@
+﻿@model IEnumerable<instagram.Models.user>
+
+
+@{
+	ViewBag.Title = "Search";
+}
+
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width"/>
+	<title>Index</title>
+</head>
+<body>
+@using (Html.BeginForm("Search", "Profile", FormMethod.Post))
+{
+	<span>User Name:</span>
+	@Html.TextBox("User Name")
+	<input placeholder="Search" asp-for =""/>
+	<button  onclick="search()">Search</button>
+	<br/>
+	<br/>
+	<table cellpadding="0" cellspacing="0">
+		<tr>
+			<th>User Name</th>
+			<th>Id</th>
+
+		</tr>
+		@if (Model != null)
+		{
+			foreach (var user in Model)
+			{
+    <tr>
+        <td> @Html.ActionLink(@user.name, "ViewProfile", new { id = @user.id })</td>
+       
+        <td> <img src="@Url.Content(user.image)" alt="error" class="img-responsive image-center" width="300" height="300" /></td>
+
+    </tr>
+			}
+		}
+
+	</table>
+}
+<script>
+
+
+
+	function search() {
+		$.ajax({
+			type: "Get",
+			url: "/Profile/index/4",
+			success: function(response) {
+			}
+		});
+
+	}
+</script>
