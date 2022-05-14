@@ -3,6 +3,7 @@
 
 @{
 	ViewBag.Title = "Search";
+	
 }
 
 
@@ -15,9 +16,10 @@
 @using (Html.BeginForm("Search", "Profile", FormMethod.Post))
 {
 	<span>User Name:</span>
-	@Html.TextBox("User Name")
-	<input placeholder="Search" asp-for =""/>
-	<button  onclick="search()">Search</button>
+
+	<input type="text" name="userName" value=""/>
+	<button type="submit">Search</button>
+
 	<br/>
 	<br/>
 	<table cellpadding="0" cellspacing="0">
@@ -30,17 +32,24 @@
 		{
 			foreach (var user in Model)
 			{
-    <tr>
-        <td> @Html.ActionLink(@user.name, "ViewProfile", new { id = @user.id })</td>
-       
-        <td> <img src="@Url.Content(user.image)" alt="error" class="img-responsive image-center" width="300" height="300" /></td>
+				<tr>
+					
+					
+					<td> @Html.ActionLink(@user.name, "ViewProfile", new { id = user.id, view = ViewData["id"] })</td>
+					
+					
 
-    </tr>
+					<td>
+						<img src="@Url.Content(user.image)" alt="error" class="img-responsive image-center" width="300" height="300"/>
+					</td>
+
+				</tr>
 			}
 		}
 
 	</table>
 }
+@*
 <script>
 
 
@@ -54,4 +63,4 @@
 		});
 
 	}
-</script>
+</script>*@

@@ -27,6 +27,7 @@ namespace instagram.Models
             this.postReacts = new HashSet<postReact>();
             this.posts = new HashSet<post>();
         }
+
         public int id { get; set; }
         [Required(ErrorMessage = "User Name Required")]
         [DisplayName("User Name")]
@@ -49,6 +50,9 @@ namespace instagram.Models
 
         public HttpPostedFileBase ImageFile { get; set; }
         public string LoginErrorMessage { get; set; }
+
+
+
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<comment> comments { get; set; }

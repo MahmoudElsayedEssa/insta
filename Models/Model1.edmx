@@ -198,7 +198,7 @@
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="state" Type="Int32" />
+          <Property Name="state" Type="instagramModel.React" />
           <Property Name="userId" Type="Int32" />
           <Property Name="postId" Type="Int32" />
           <NavigationProperty Name="post" Relationship="Self.FK__postReact__postI__403A8C7D" FromRole="postReacts" ToRole="posts" />
@@ -349,6 +349,10 @@
             <End Role="posts" EntitySet="posts" />
           </AssociationSet>
         </EntityContainer>
+        <EnumType Name="React">
+          <Member Name="Like" Value="0" />
+          <Member Name="Dislike" Value="1" />
+        </EnumType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

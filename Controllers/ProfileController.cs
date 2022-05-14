@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using instagram.Models;
+using instagram.ViewModels;
 
 namespace instagram.Controllers
 {
@@ -71,11 +72,65 @@ namespace instagram.Controllers
         }
 
 
-        public ActionResult ShowUserPosts(int id)
+        public ActionResult ShowUserPosts(int id, int viewUserId)
         {
-            var posts = db.posts.Where(p => p.userId == id);
+            var posts = db.posts.Where(p => p.userId == viewUserId);
 
-            return View(posts);
+            var listOfPostReacts = new List<PostReacts>();
+            foreach (var post in posts)
+            {
+                //comment
+                var comments = db.comments.Where(p => p.postId == post.id);
+                var userscommment = new List<UserComment>();
+
+                foreach (var comment in comments)
+                {
+                    var user = db.users.Single(u => u.id == comment.userId);
+                    var userComment = new UserComment
+                    {
+                        Comment = comment,
+                        User = user
+                    };
+                    userscommment.Add(userComment);
+                }
+
+                var postComments = new PostComments
+                {
+                    Post = post,
+                    UsersComments = userscommment
+                };
+                 
+                //react
+                var reacts = db.postReacts.Where(r => r.postId == post.id);
+                var usersReacts = new List<UserReact>();
+
+                foreach (var React in reacts)
+                {
+                    var user = db.users.Single(u => u.id == React.userId);
+                    var userReact = new UserReact()
+                    {
+                        PostReact = React,
+                        User = user
+                    };
+                    usersReacts.Add(userReact);
+                }
+
+                var postReact = new PostReacts
+                {
+                    Post = post,
+                    UserReacts = usersReacts,
+                    UsersComments = userscommment
+                    
+                };
+
+                listOfPostReacts.Add(postReact);
+            }
+
+            var model = new PostViewModel
+            {
+                PostReactsList = listOfPostReacts,
+            };
+            return View(model);
         }
 
         public ActionResult ShowUserFollowers(int id)
@@ -88,13 +143,13 @@ namespace instagram.Controllers
         /*
         [HttpGet]
         */
-        public ActionResult Search(string userName)
+        public ActionResult Search(string userName,int id)
         {
             var users = db.users.Where(u => u.name == userName).ToList();
+            ViewData["id"] = id;
             return View(users);
         }
 
-      
 
         /*[HttpPost]
         public ActionResult Search(string userName,int id)
@@ -104,13 +159,10 @@ namespace instagram.Controllers
         }*/
 
 
-
         public ActionResult ViewProfile(int id)
         {
             var user = db.users.FirstOrDefault(u => u.id == id);
             return View(user);
-
         }
-        
     }
 }

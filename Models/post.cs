@@ -26,6 +26,7 @@ namespace instagram.Models
         public int id { get; set; }
         public string image { get; set; }
         public HttpPostedFileBase ImageFile { get; set; }
+
         public Nullable<int> userId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

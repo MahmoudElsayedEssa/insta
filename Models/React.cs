@@ -10,16 +10,10 @@
 namespace instagram.Models
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class postReact
+    public enum React : int
     {
-        public int id { get; set; }
-        public Nullable<React> state { get; set; }
-        public Nullable<int> userId { get; set; }
-        public Nullable<int> postId { get; set; }
-    
-        public virtual post post { get; set; }
-        public virtual user user { get; set; }
+        Like = 0,
+        Dislike = 1
     }
 }

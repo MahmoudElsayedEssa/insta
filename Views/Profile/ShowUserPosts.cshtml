@@ -1,4 +1,4 @@
-﻿@model IEnumerable<instagram.Models.post>
+﻿@model instagram.ViewModels.PostViewModel
 
 @{
     ViewBag.Title = "ShowUserPosts";
@@ -11,27 +11,37 @@
 </p>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.image)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.userId)
-        </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-	        <img src="@Url.Content(item.image )" alt="error" class="img-responsive image-center" width="300" height="300" />
-        </td>
-        
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
+@foreach (var item in Model.PostReactsList) {
+<tr>
+    <td>
+        <img src="@Url.Content(item.Post.image)" alt="error" class="img-responsive image-center" width="300" height="300" />
+    </td>
+
+    @if (item.UsersComments != null)
+    {
+        <td> comments </td>
+        foreach (var i in item.UsersComments)
+        {
+            <td>@i.User.name</td>
+            <td>@i.Comment.content</td>
+        }
+    }
+    @if (item.UserReacts != null)
+    {
+        <td> Reacts </td>
+        foreach (var i in item.UserReacts)
+        {
+            <td>@i.User.name</td>
+            <td>@i.PostReact.state</td>
+        }
+    }
+    
+
+
+</tr>
 }
 
 </table>
