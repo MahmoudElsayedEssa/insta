@@ -1,55 +1,67 @@
-﻿@model instagram.Models.user
+﻿@using instagram.Models
+@model instagram.Models.user
 
 @{
-    ViewBag.Title = "ViewProfile";
+	ViewBag.Title = "ViewProfile";
+	var follower = (follower)ViewData["follower"];
 }
 
 <h2>ViewProfile</h2>
 
 <div>
-    <h4>user</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.name)
-        </dt>
+	<h4>user</h4>
+	<hr/>
+	<dl class="dl-horizontal">
+		<dt>
+			@Html.DisplayNameFor(model => model.name)
+		</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.name)
-        </dd>
+		<dd>
+			@Html.DisplayFor(model => model.name)
+		</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.password)
-        </dt>
+		<dt>
+			@Html.DisplayNameFor(model => model.email)
+		</dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.password)
-        </dd>
+		<dd>
+			@Html.DisplayFor(model => model.email)
+		</dd>
 
-        
+		<dt>
+			@Html.DisplayNameFor(model => model.image)
+		</dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.email)
-        </dt>
+		<dd>
+			<img src="@Url.Content(Model.image)" alt="error" class="img-responsive image-center" width="300" height="300"/>
+		</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.email)
-        </dd>
+		@if (follower == null)
+		{
+			using (Html.BeginForm("ControlRequest", "Profile", FormMethod.Post))
+			{
+                <button type="submit" name="value" value="Requested">Follow</button>
+			}
+		}
+		else
+		{
+			if (follower.state == "Requested")
+			{
+				<button>Requested</button>
+			}
+			else
+			{
+				<button>Following</button>
+			}
+		}
 
-        <dt>
-            @Html.DisplayNameFor(model => model.image)
-        </dt>
 
-        <dd>
-	        <img src="@Url.Content(Model.image)" alt="error" class="img-responsive image-center" width="300" height="300" />
-        </dd>
 
-        
 
-    </dl>
+	</dl>
 </div>
 <p>
-	@Html.ActionLink("Edit", "ShowUserPosts", new { id = Model.id }) 
+	@Html.ActionLink("show posts", "ShowUserPosts", new { Model.id, viewerId = ViewData["id"] })
 
 	@Html.ActionLink("Back to List", "Index")
 </p>

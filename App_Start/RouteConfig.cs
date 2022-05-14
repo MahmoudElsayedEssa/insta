@@ -15,8 +15,8 @@ namespace instagram
             routes.MapMvcAttributeRoutes();
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}/{viewID}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional, viewID = UrlParameter.Optional }
+                url: "{controller}/{action}/{id}/{viewerId}",
+                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional, viewerId = UrlParameter.Optional }
             );
             
         }

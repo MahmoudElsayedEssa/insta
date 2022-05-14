@@ -1,47 +1,78 @@
 ﻿@model instagram.ViewModels.PostViewModel
 
 @{
-    ViewBag.Title = "ShowUserPosts";
+	ViewBag.Title = "ShowUserPosts";
 }
 
 <h2>ShowUserPosts</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
-    <tr>
-        <th></th>
-    </tr>
+	<tr>
+		<th></th>
+	</tr>
 
-@foreach (var item in Model.PostReactsList) {
-<tr>
-    <td>
-        <img src="@Url.Content(item.Post.image)" alt="error" class="img-responsive image-center" width="300" height="300" />
-    </td>
+	@foreach (var item in Model.PostReactsList)
+	{
+		<tr>
+			<td>
+				<img src="@Url.Content(item.Post.image)" alt="error" class="img-responsive image-center" width="300" height="300"/>
+			</td>
 
-    @if (item.UsersComments != null)
-    {
-        <td> comments </td>
-        foreach (var i in item.UsersComments)
-        {
-            <td>@i.User.name</td>
-            <td>@i.Comment.content</td>
-        }
-    }
-    @if (item.UserReacts != null)
-    {
-        <td> Reacts </td>
-        foreach (var i in item.UserReacts)
-        {
-            <td>@i.User.name</td>
-            <td>@i.PostReact.state</td>
-        }
-    }
-    
+			@if (item.UsersComments != null)
+			{
+				foreach (var i in item.UsersComments)
+				{
+					<tr>
+						<td> comment </td>
+						<td>@i.User.name</td>
+						<td>@i.Comment.content</td>
+					</tr>
+				}
+			}
+			<td>
+				@using (Html.BeginForm("Comment", "Profile", FormMethod.Post))
+				{
+					Session["postID"] = item.Post.id;
+					<input type="text" name="value" value=""/>
+					<button type="submit" name="postID" value="@item.Post.id">Comment</button>
+				}
+			</td>
+
+			@if (item.UserReacts != null)
+			{
+				foreach (var i in item.UserReacts)
+				{
+					<tr>
+						<td> React</td>
+						<td>@i.User.name</td>
+						<td>@i.PostReact.state</td>
+					</tr>
+				}
+			}
+			<td>
+
+				@using (Html.BeginForm("Like", "Profile", FormMethod.Post))
+				{
+					if (item.Post.LikeCount != null)
+					{
+						<h1>ahhhh @item.Post.LikeCount</h1>
+					}
+
+					<button type="submit" name="postID" value="@item.Post.id">Like</button>
+				}
+
+				@using (Html.BeginForm("Dislike", "Profile", FormMethod.Post))
+				{
+					<h1>@item.Post.DislikeCount</h1>
+					<button type="submit" name="postID" value="@item.Post.id">Dislike</button>
+				}
+
+			</td>
 
 
-</tr>
-}
+		</tr>
+	}
 
 </table>

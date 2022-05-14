@@ -17,6 +17,7 @@ namespace instagram.Models
         public int id { get; set; }
         public Nullable<int> userId { get; set; }
         public Nullable<int> followerId { get; set; }
+        public string state { get; set; }
     
         public virtual user user { get; set; }
         public virtual user user1 { get; set; }

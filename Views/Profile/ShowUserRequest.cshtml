@@ -1,0 +1,37 @@
+﻿@model IEnumerable<instagram.Models.follower>
+
+@{
+	ViewBag.Title = "ShowUserRequest";
+}
+
+<h2>ShowUserRequest</h2>
+
+
+<table class="table">
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.followerId)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.state)
+		</th>
+		<th></th>
+	</tr>
+
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.followerId)
+			</td>
+			<td>
+				@using (Html.BeginForm("AcceptRequest", "Profile", FormMethod.Post))
+				{
+					<input name="ID" value="@item.userId"></input>
+					<button type="submit" name="ViewerID" value="@item.followerId">Accept</button>
+				}
+			</td>
+		</tr>
+	}
+
+</table>

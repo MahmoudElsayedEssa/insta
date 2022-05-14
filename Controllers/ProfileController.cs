@@ -72,9 +72,9 @@ namespace instagram.Controllers
         }
 
 
-        public ActionResult ShowUserPosts(int id, int viewUserId)
+        public ActionResult ShowUserPosts(int id, int viewerId)
         {
-            var posts = db.posts.Where(p => p.userId == viewUserId);
+            var posts = db.posts.Where(p => p.userId == id);
 
             var listOfPostReacts = new List<PostReacts>();
             foreach (var post in posts)
@@ -99,7 +99,7 @@ namespace instagram.Controllers
                     Post = post,
                     UsersComments = userscommment
                 };
-                 
+
                 //react
                 var reacts = db.postReacts.Where(r => r.postId == post.id);
                 var usersReacts = new List<UserReact>();
@@ -107,7 +107,7 @@ namespace instagram.Controllers
                 foreach (var React in reacts)
                 {
                     var user = db.users.Single(u => u.id == React.userId);
-                    var userReact = new UserReact()
+                    var userReact = new UserReact
                     {
                         PostReact = React,
                         User = user
@@ -120,7 +120,6 @@ namespace instagram.Controllers
                     Post = post,
                     UserReacts = usersReacts,
                     UsersComments = userscommment
-                    
                 };
 
                 listOfPostReacts.Add(postReact);
@@ -128,22 +127,36 @@ namespace instagram.Controllers
 
             var model = new PostViewModel
             {
-                PostReactsList = listOfPostReacts,
+                PostReactsList = listOfPostReacts
             };
+            Session["id"] = id;
+            Session["viewerId"] = viewerId;
+
+
             return View(model);
         }
 
         public ActionResult ShowUserFollowers(int id)
         {
-            var followes = db.followers.Where(p => p.userId == id);
+            var followes = db.followers.Where(p => p.userId == id && p.state == "following");
+            /*var user = db.users.SingleOrDefault(p => p.id == id);
+            var userFollow = new UserFollow
+            {
+                Followers = followes,
+                User = user
+            };*/
+            return View(followes);
+        }
+
+        public ActionResult ShowUserRequest(int id)
+        {
+            var followes = db.followers.Where(p => p.userId == id && p.state == "requested");
 
             return View(followes);
         }
 
-        /*
-        [HttpGet]
-        */
-        public ActionResult Search(string userName,int id)
+
+        public ActionResult Search(string userName, int id)
         {
             var users = db.users.Where(u => u.name == userName).ToList();
             ViewData["id"] = id;
@@ -151,18 +164,149 @@ namespace instagram.Controllers
         }
 
 
-        /*[HttpPost]
-        public ActionResult Search(string userName,int id)
-        {
-            var users = db.users.SqlQuery($"select * from users where users.name like '%'+{userName}+'%'");
-            return View("Search",users);
-        }*/
-
-
-        public ActionResult ViewProfile(int id)
+        public ActionResult ViewProfile(int id, int viewerId)
         {
             var user = db.users.FirstOrDefault(u => u.id == id);
+            var follower = db.followers.SingleOrDefault(f => f.userId == id && f.followerId == viewerId);
+
+
+            ViewData["id"] = viewerId;
+            ViewData["follower"] = follower;
+
+            Session["id"] = id;
+            Session["viewerId"] = viewerId;
+
             return View(user);
+        }
+
+
+        public ActionResult Like(int postID)
+        {
+            var viewerID = (int)Session["viewerId"];
+            var post = db.posts.SingleOrDefault(p => p.id == postID);
+            var userReactOnPost = db.postReacts.SingleOrDefault(r => r.postId == postID && r.userId == viewerID);
+
+            //new like
+            if (userReactOnPost == null)
+            {
+                var postReact = new postReact { postId = postID, userId = viewerID, state = 0 };
+
+                post.LikeCount = post.LikeCount ?? 0 + 1;
+                post.DislikeCount = post.DislikeCount ?? 0;
+
+                db.postReacts.Add(postReact);
+            }
+
+            else
+            {
+                if (userReactOnPost.state == 0)
+                {
+                    userReactOnPost.state = (React?)-1;
+                    post.LikeCount--;
+                }
+                else
+                {
+                    userReactOnPost.state = 0;
+                    post.LikeCount++;
+                }
+            }
+
+
+            db.SaveChanges();
+            return RedirectToAction("ShowUserPosts", "Profile",
+                new { id = Session["id"], viewerId = Session["viewerId"] });
+        }
+
+        public ActionResult Dislike(int postID)
+        {
+            var viewerID = (int)Session["viewerId"];
+            var post = db.posts.SingleOrDefault(p => p.id == postID);
+
+            var userReactOnPost = db.postReacts.SingleOrDefault(r => r.postId == postID && r.userId == viewerID);
+
+            //new Dislike
+            if (userReactOnPost == null)
+            {
+                var postReact = new postReact { postId = postID, userId = viewerID, state = (React?)1 };
+
+                post.LikeCount = post.LikeCount ?? 0 + 1;
+                post.DislikeCount = post.DislikeCount ?? 0;
+                db.postReacts.Add(postReact);
+            }
+
+            else
+            {
+                if (userReactOnPost.state == (React?)1)
+                {
+                    userReactOnPost.state = (React?)-1;
+                    post.DislikeCount--;
+                }
+                else
+                {
+                    userReactOnPost.state = (React?)1;
+                    post.DislikeCount++;
+                }
+            }
+
+
+            db.SaveChanges();
+            return RedirectToAction("ShowUserPosts", "Profile",
+                new { id = Session["id"], viewerId = Session["viewerId"] });
+        }
+
+        public ActionResult Comment(string value, int postID)
+        {
+            var viewerID = (int)Session["viewerId"];
+            var comment = new comment
+            {
+                content = value,
+                postId = postID,
+                userId = viewerID
+            };
+
+            db.comments.Add(comment);
+            db.SaveChanges();
+            return RedirectToAction("ShowUserPosts", "Profile",
+                new { id = Session["id"], viewerId = Session["viewerId"] });
+        }
+
+        public ActionResult ControlRequest(string value)
+        {
+            var viewerID = (int)Session["viewerId"];
+            var id = (int)Session["id"];
+
+            var ff = db.followers.SingleOrDefault(f => f.userId == id && f.followerId == viewerID);
+
+            if (ff == null)
+            {
+                var req = new follower
+                {
+                    followerId = viewerID,
+                    userId = id,
+                    state = "Requested"
+                };
+                db.followers.Add(req);
+            }
+            else
+            {
+                if (ff.state == "Accept") ff.state = "Following";
+            }
+
+            db.SaveChanges();
+            return RedirectToAction("ViewProfile", "Profile",
+                new { id, viewerId = viewerID });
+        }
+
+        public ActionResult AcceptRequest(int ID, int ViewerID)
+        {
+            var ff = db.followers.SingleOrDefault(f => f.userId == ID && f.followerId == ViewerID);
+
+
+            ff.state = "Following";
+
+            db.SaveChanges();
+            return RedirectToAction("ShowUserRequest", "Profile",
+                new { ID });
         }
     }
 }

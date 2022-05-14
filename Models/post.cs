@@ -25,6 +25,9 @@ namespace instagram.Models
     
         public int id { get; set; }
         public string image { get; set; }
+        public int? LikeCount { get; set; }
+
+        public int?  DislikeCount { get; set; }
         public HttpPostedFileBase ImageFile { get; set; }
 
         public Nullable<int> userId { get; set; }

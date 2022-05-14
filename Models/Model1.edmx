@@ -21,6 +21,7 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="userId" Type="int" />
           <Property Name="followerId" Type="int" />
+          <Property Name="state" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="postReacts">
           <Key>
@@ -192,6 +193,7 @@
           <Property Name="followerId" Type="Int32" />
           <NavigationProperty Name="user" Relationship="Self.FK__followers__follo__398D8EEE" FromRole="followers" ToRole="users" />
           <NavigationProperty Name="user1" Relationship="Self.FK__followers__userI__38996AB5" FromRole="followers" ToRole="users" />
+          <Property Name="state" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="postReact">
           <Key>
@@ -372,6 +374,7 @@
           <EntitySetMapping Name="followers">
             <EntityTypeMapping TypeName="instagramModel.follower">
               <MappingFragment StoreEntitySet="followers">
+                <ScalarProperty Name="state" ColumnName="state" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="followerId" ColumnName="followerId" />
